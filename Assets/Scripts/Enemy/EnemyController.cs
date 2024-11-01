@@ -74,8 +74,9 @@ public class EnemyController : MonoBehaviour
         return enemyType.Damage;
     }
 
-    private void OnCollisionEnter(Collision collision)
+   /* private void OnCollisionEnter(Collision collision)
     {
+   
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
@@ -84,5 +85,5 @@ public class EnemyController : MonoBehaviour
                 player.TakeDamage(GetDamage());
             }
         }
-    }
+    }*/
 }
