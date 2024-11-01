@@ -68,4 +68,21 @@ public class EnemyController : MonoBehaviour
     {
         return m_Agent;
     }
+    
+    public int GetDamage()
+    {
+        return enemyType.Damage;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                player.TakeDamage(GetDamage());
+            }
+        }
+    }
 }

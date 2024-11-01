@@ -23,9 +23,12 @@ public class PlayerController : MonoBehaviour
 
     private bool m_OnJump = false;
 
+    private PlayerHealth playerHealth; // Nueva referencia
+
     private void Start() 
     {
         Cursor.lockState = CursorLockMode.Locked;
+        playerHealth = GetComponent<PlayerHealth>(); // Obtener el componente PlayerHealth
     }
 
     public void Move(Vector2 movement)
@@ -99,5 +102,13 @@ public class PlayerController : MonoBehaviour
         }
 
         
+    }
+
+    public void TakeDamage(int amount)
+    {
+        if (playerHealth != null)
+        {
+            playerHealth.ReceiveDamage(amount);
+        }
     }
 }
