@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,8 +12,8 @@ public class PlayerHealth : MonoBehaviour
     public float rechargeInterval = 1f;
     private bool isRecharging = false;
 
-   
-    public GameObject gameOverCanvas;
+    // Agregar el evento OnPlayerDeath
+    public event Action OnPlayerDeath;
 
     public void ReceiveDamage(int damage)
     {
@@ -45,8 +46,9 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0)
         {
-           
-            GameOver();
+            // Notificar al GameController en lugar de manejar la lógica aquí
+            if (OnPlayerDeath != null)
+                OnPlayerDeath();
         }
 
      
@@ -79,18 +81,5 @@ public class PlayerHealth : MonoBehaviour
         isRecharging = false;
         Debug.Log("Recarga de escudo completa");
         Debug.Log($"Escudo completo: {shield}");
-    }
-
-    private void GameOver()
-    {
-        Debug.Log("El juego ha terminado");
-
-      
-        if (gameOverCanvas != null)
-        {
-            gameOverCanvas.SetActive(true);
-        }
-
-        Time.timeScale = 0f; 
     }
 }
