@@ -30,9 +30,13 @@ public class PlayerController : MonoBehaviour
     private bool m_OnJump = false;
     private float m_NextFireTime = 0f; // Tiempo en el que el jugador puede disparar nuevamente
 
+    private PlayerHealth playerHealth; 
+
+
     private void Start() 
     {
         Cursor.lockState = CursorLockMode.Locked;
+        playerHealth = GetComponent<PlayerHealth>(); 
     }
 
     public void Move(Vector2 movement)
@@ -105,4 +109,16 @@ public class PlayerController : MonoBehaviour
             m_NextFireTime = Time.time + m_FireRate;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+       
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Colisi�n con un enemigo detectada. Recibiendo da�o...");
+            playerHealth.ReceiveDamage(3); 
+        }
+    }
+
 }

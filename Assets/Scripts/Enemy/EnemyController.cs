@@ -68,4 +68,11 @@ public class EnemyController : MonoBehaviour
     {
         return m_Agent;
     }
+    
+    public int GetDamage()
+    {
+        return enemyType.Damage;
+    }
+
+   
 }
