@@ -16,12 +16,19 @@ public class PlayerController : MonoBehaviour
     private float m_JumpHeight = 2.0f; 
     [SerializeField]
     private GameObject m_FireSphere;
+    [SerializeField]
+    private float m_FireRate = 1f;
+    [SerializeField]
+    private int m_BulletDamage;
+
+    [SerializeField]
+    private HealthEnemy m_HealthEnemy;
 
     private Vector3 m_PlayerVelocity = Vector3.zero;
 
     private bool m_IsGrounded;
-
     private bool m_OnJump = false;
+    private float m_NextFireTime = 0f; // Tiempo en el que el jugador puede disparar nuevamente
 
     private void Start() 
     {
@@ -35,35 +42,25 @@ public class PlayerController : MonoBehaviour
         if (m_IsGrounded && m_PlayerVelocity.y < 0)
         {
             m_PlayerVelocity.y = 0f;
-
         }
 
-        // Calcular el movimiento plano XZ
-        Vector3 move = new Vector3(movement.x, 0, movement.y);
-        move = move * m_Speed;
-
-        // Calculamos la nueva velocidad en Y
-        if (m_OnJump &&  m_IsGrounded)
+        Vector3 move = new Vector3(movement.x, 0, movement.y) * m_Speed;
+        if (m_OnJump && m_IsGrounded)
         {
-            m_PlayerVelocity.y += Mathf.Sqrt(
-                -2f * Physics.gravity.y * m_JumpHeight
-            );
+            m_PlayerVelocity.y += Mathf.Sqrt(-2f * Physics.gravity.y * m_JumpHeight);
             m_OnJump = false;
         }
 
-        // Muevo el objeto en referencia al forward de Camara
-        move = Camera.main.transform.forward * move.z + 
-            Camera.main.transform.right * move.x;
+        move = Camera.main.transform.forward * move.z + Camera.main.transform.right * move.x;
         move.y = 0f;
 
-        // Rotacion
         var angles = Quaternion.RotateTowards(
             transform.rotation,
             Camera.main.transform.rotation,
             300f * Time.deltaTime
         ).eulerAngles;
-        angles.x = 0f; // bloqueamos la rotacion
-        angles.z = 0f; // bloqueamos la rotacion
+        angles.x = 0f;
+        angles.z = 0f;
 
         transform.rotation = Quaternion.Euler(angles);
 
@@ -84,20 +81,28 @@ public class PlayerController : MonoBehaviour
 
     public void Fire()
     {
-        // 1. Lanzar un raycast
-        RaycastHit hit;
-        var collision = Physics.Raycast(
-            m_FirePoint.position,
-            Camera.main.transform.forward,
-            out hit,
-            m_FireRange
-        );
-        if (collision)
+        if (Time.time >= m_NextFireTime)
         {
-            // 2. Donde colisione el raycast, ejecutar un sistema de particulas
-            Instantiate(m_FireSphere, hit.point, Quaternion.identity);
-        }
+            RaycastHit hit;
+            var collision = Physics.Raycast(
+                m_FirePoint.position,
+                Camera.main.transform.forward,
+                out hit,
+                m_FireRange
+            );
 
-        
+            if (collision)
+            {
+                Debug.Log("Colisionó con: " + hit.collider.gameObject.name);
+                Instantiate(m_FireSphere, hit.point, Quaternion.identity);
+                if (hit.collider.gameObject.name == "Mago")
+                {
+                    m_HealthEnemy.TakeDamage(m_BulletDamage);
+                }
+            }
+
+            // Establecer el siguiente tiempo de disparo
+            m_NextFireTime = Time.time + m_FireRate;
+        }
     }
 }
