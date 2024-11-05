@@ -4,25 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private Transform m_FirePoint;
-    [SerializeField]
-    private float m_FireRange = 10f;
+    public static Transform PlayerTransform;
+
     [SerializeField]
     private CharacterController m_CharacterController;
     [SerializeField]
     private float m_Speed = 5.0f;
     [SerializeField]
-    private float m_JumpHeight = 2.0f; 
+    private float m_JumpHeight = 2.0f;
     [SerializeField]
-    private GameObject m_FireSphere;
+    private Transform m_FirePoint;
     [SerializeField]
-    private float m_FireRate = 1f;
-    [SerializeField]
-    private int m_BulletDamage;
-
-    [SerializeField]
-    private HealthEnemy m_HealthEnemy;
+    private WeaponSO m_WeaponData;
 
     private Vector3 m_PlayerVelocity = Vector3.zero;
 
@@ -36,7 +29,8 @@ public class PlayerController : MonoBehaviour
     private void Start() 
     {
         Cursor.lockState = CursorLockMode.Locked;
-        playerHealth = GetComponent<PlayerHealth>(); 
+        playerHealth = GetComponent<PlayerHealth>();
+        PlayerTransform = transform;
     }
 
     public void Move(Vector2 movement)
@@ -92,21 +86,22 @@ public class PlayerController : MonoBehaviour
                 m_FirePoint.position,
                 Camera.main.transform.forward,
                 out hit,
-                m_FireRange
+                m_WeaponData.FireRange
             );
 
             if (collision)
             {
                 Debug.Log("Colisionó con: " + hit.collider.gameObject.name);
-                Instantiate(m_FireSphere, hit.point, Quaternion.identity);
-                if (hit.collider.gameObject.name == "Mago")
+                Instantiate(m_WeaponData.FireSphere, hit.point, Quaternion.identity);
+                if (hit.transform.TryGetComponent(out HealthEnemy m_HealthEnemy))
                 {
-                    m_HealthEnemy.TakeDamage(m_BulletDamage);
+                    Debug.Log("Mago sufrió daño");
+                    m_HealthEnemy.TakeDamage(m_WeaponData.BulletDamage);
                 }
             }
 
             // Establecer el siguiente tiempo de disparo
-            m_NextFireTime = Time.time + m_FireRate;
+            m_NextFireTime = Time.time + m_WeaponData.FireRate;
         }
     }
 

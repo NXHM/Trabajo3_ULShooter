@@ -6,7 +6,8 @@ using UnityEngine;
 public class EnemySO : ScriptableObject
 {
     public string EnemyName;
+    public float DistanceToChase = 6f;
     public float Speed;
-    public float InitialHealth;
-    public int Damage;
+    public int InitialHealth = 1;
+    public int Damage = 1;
 }

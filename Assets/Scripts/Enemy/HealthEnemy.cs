@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class HealthEnemy : MonoBehaviour
 {
-    [SerializeField]
-    private int m_Health = 3; // Vida inicial del enemigo
+    private int m_Health; // Vida inicial del enemigo
+
+    public void SetHealth(int health)
+    {
+        m_Health = health;
+    }
 
     // Función pública para recibir daño
     public void TakeDamage(int damage)
@@ -22,6 +26,6 @@ public class HealthEnemy : MonoBehaviour
         Debug.Log("El enemigo ha muerto.");
         
 
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }
