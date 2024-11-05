@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyName: Slow Enemy
   DistanceToChase: 15
-  Speed: 5
+  Speed: 1
   InitialHealth: 10
   Damage: 10

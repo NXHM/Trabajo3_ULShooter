@@ -6,17 +6,14 @@ public class GameController : MonoBehaviour
 {
     // Agregar referencia al canvas de game over
     public GameObject gameOverCanvas;
+    [SerializeField] private PlayerHealth m_PlayerHealth;
 
     // Start is called before the first frame update
     void Start()
     {
         gameOverCanvas.SetActive(false);
         // Suscribirse al evento OnPlayerDeath de PlayerHealth
-        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
-        if (playerHealth != null)
-        {
-            playerHealth.OnPlayerDeath += GameOver;
-        }
+        m_PlayerHealth.OnPlayerDeath += GameOver;
     }
 
     // Update is called once per frame

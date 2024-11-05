@@ -91,9 +91,9 @@ public class PlayerController : MonoBehaviour
 
             if (collision)
             {
-                Debug.Log("Colisionó con: " + hit.collider.gameObject.name);
+                Debug.Log("Colisionó con: " + hit.collider.name);
                 Instantiate(m_WeaponData.FireSphere, hit.point, Quaternion.identity);
-                if (hit.transform.TryGetComponent(out HealthEnemy m_HealthEnemy))
+                if (hit.collider.TryGetComponent(out HealthEnemy m_HealthEnemy))
                 {
                     Debug.Log("Mago sufrió daño");
                     m_HealthEnemy.TakeDamage(m_WeaponData.BulletDamage);
@@ -107,12 +107,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-       
 
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.transform.TryGetComponent(out EnemyController m_EnemyController))
         {
             Debug.Log("Colisi�n con un enemigo detectada. Recibiendo da�o...");
-            playerHealth.ReceiveDamage(3); 
+            playerHealth.ReceiveDamage(m_EnemyController.GetDamage());
         }
     }
 
