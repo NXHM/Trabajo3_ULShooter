@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public int shield = 100;
     public int health = 100;
+    public int maxHealth = 100;
     public int maxShield = 100;
     public float rechargeDelay = 5f;
     public int rechargeAmount = 10;
@@ -14,6 +15,31 @@ public class PlayerHealth : MonoBehaviour
 
     // Agregar el evento OnPlayerDeath
     public event Action OnPlayerDeath;
+
+    [SerializeField] HUDController hudController;
+    [SerializeField] BarController healthBar;
+    [SerializeField] BarController shieldBar;
+
+    void Start()
+    {
+        health = maxHealth;
+        healthBar.Setup(maxHealth, health);
+        shieldBar.Setup(maxShield, shield);
+    }
+
+    void Update()
+    {
+        /*
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            health -= 10;
+            hudController.UpdateSprite();
+            healthBar.SetValue(health);
+        }
+        */
+
+        shieldBar.SetValue(shield);
+    }
 
     public void ReceiveDamage(int damage)
     {
@@ -56,6 +82,9 @@ public class PlayerHealth : MonoBehaviour
         {
             StartCoroutine(RechargeShield());
         }
+
+        hudController.UpdateSprite();
+        healthBar.SetValue(health);
     }
 
     private IEnumerator RechargeShield()
