@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: FastEnemy
   m_EditorClassIdentifier: 
   EnemyName: Fast Enemy
-  Speed: 10
-  InitialHealth: 8
+  DistanceToChase: 6
+  Speed: 3
+  InitialHealth: 5
+  Damage: 5

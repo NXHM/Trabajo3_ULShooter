@@ -8,12 +8,11 @@ public class EnemyController : MonoBehaviour
 {
     #region Properties
     [SerializeField]
-    private Transform m_Player;
-    [SerializeField]
-    private float m_DistanceToChase = 6f;
-    [SerializeField]
     private NavMeshAgent m_Agent;
-    public EnemySO enemyType;
+    [SerializeField]
+    private HealthEnemy m_HealthEnemy;
+    [SerializeField]
+    private EnemySO m_EnemyType;
     #endregion
 
     #region States
@@ -25,12 +24,13 @@ public class EnemyController : MonoBehaviour
 
     private void Awake() 
     {
-        m_Agent = GetComponent<NavMeshAgent>();
-
+        //m_Agent = GetComponent<NavMeshAgent>();
         IdleState = new EnemyIdle(this);
         ChaseState = new EnemyChase(this);
         //...
         StartStateMachine();
+        m_Agent.speed = m_EnemyType.Speed;
+        m_HealthEnemy.SetHealth(m_EnemyType.InitialHealth);
     }
 
     private void Update() 
@@ -56,16 +56,23 @@ public class EnemyController : MonoBehaviour
 
     public Transform GetPlayer()
     {
-        return m_Player;
+        return PlayerController.PlayerTransform;
     }
 
     public float GetDistanceToChase()
     {
-        return m_DistanceToChase;
+        return m_EnemyType.DistanceToChase;
     }
 
     public NavMeshAgent GetAgent()
     {
         return m_Agent;
     }
+    
+    public int GetDamage()
+    {
+        return m_EnemyType.Damage;
+    }
+
+   
 }

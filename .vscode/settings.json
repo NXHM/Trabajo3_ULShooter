@@ -51,6 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "2024-3_ULShooter.sln",
+    "dotnet.defaultSolution": "Trabajo3_ULShooter.sln",
     "dotnet.preferCSharpExtension": true
 }
